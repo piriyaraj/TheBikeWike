@@ -3,6 +3,8 @@ scrapping table from link
 creat :29/12/2020
 update:30/12/2020
 """
+from doctest import testmod
+from PIL import ImageFilter
 from unicodedata import category
 from PIL import Image
 from PIL import ImageFont
@@ -16,7 +18,7 @@ try:
 except:
     import constant,articalWriter
 # import articalWriter
-
+testMode=True
 
 def downloadImg(soup):
     try:
@@ -52,7 +54,7 @@ def downloadImg(soup):
 # https: // bikez.com/pictures/ajs/2022/58346_0_1_2_tempest % 20roadster % 20125_Image % 20credits % 20-%20AJS.jpg
     imgTitleList=[]
     for i in range(len(imgList)):
-        img_title = "./tempImg/"+soup.title.text.split('specifications')[0].split(" |")[0]+"bikespeci "+str(i)+'.webp'
+        img_title = "./tempImg/"+soup.title.text.split('specifications')[0].split(" |")[0]+"TheBikeWiki "+str(i)+'.webp'
         img_url = imgList[i]
         res = requests.get(img_url)
         file = open(img_title, 'wb')
@@ -105,40 +107,70 @@ def imgtext(bikeName, keys,values):
             pass
 
     # print(text1)
-    text1 += "                                                BikeSpeci"
+    text1 += "                                                TheBikeWiki"
     return text1
 
 def addLogo(text1, logo,image):
-
+    if(testMode):
+        print("logo adding start")
     image1 = Image.open(image) # open the images
     image1 = image1.resize((1200, 900))  # 1280*1920
     draw = ImageDraw.Draw(image1)
     font = ImageFont.truetype("arial.ttf", 30)
     #x, y = (width - 510, height-100)
     image1_size = image1.size
-    text = "BikeSpeci"
-    w, h = font.getsize(text)
-    x, y = int((image1_size[0]-w)/2), int((image1_size[1]-h)/2)
-    x1,y1 = int((5.5*image1_size[0]/10)),int((image1_size[1]/10))
-    draw.rectangle((x, y, x + w, y + h), fill='black')
-    draw.text((x, y), text, fill=(209, 239, 8), font=font)
+
+    # add middle text
+    # text = "TheBikeWiki"
+    # w, h = font.getsize(text)
+    # x, y = int((image1_size[0]-w)/2), int((image1_size[1]-h)/2)
+    # x1,y1 = int((5.5*image1_size[0]/10)),int((image1_size[1]/10))
+    # draw.rectangle((x, y, x + w, y + h), fill='black')
+    # draw.text((x, y), text, fill=(209, 239, 8), font=font)
 
 
     image2 = Image.open(logo)  # open logo
     image1_size = image1.size        # get image size
-    image2 = image2.resize((int(image1_size[0]/3), int(image1_size[1]/4)))# resize the logo as 1/9 image size
+    # image2 = image2.resize((int(image1_size[0]/3), int(image1_size[1]/4)))# resize the logo as 1/9 image size
     image2_size = image2.size        # get the resized logo sizes
     # new_image = Image.new('RGB',(image1_size[0], 2*image1_size[1]), (250,250,250))  #create new image size as old image size
-    new_image = Image.new('RGB', (image1_size[0], 2*image1_size[1]), (250,250,250))  #create new image size as old image size
+    new_image = Image.new('RGB', (image1_size[0], 2*image1_size[1]), (255,255,255))  #create new image size as old image size
     new_image.paste(image1, (0,0))    # insert image into new image we created
-    new_image.paste(image2, ((image1_size[0]-image2_size[0],image1_size[1]-image2_size[1]))) # insert resized logo into the new image
+    # new_image.paste(image2, ((image1_size[0]-image2_size[0],image1_size[1]-image2_size[1]))) # insert resized logo into the new image
     # print(text1)
+    x1 = 780
+
+
+    y1 = 680
+    x2 = 1170
+    y2 = 900
+
+    # Create rectangle mask
+    mask = Image.new('L', new_image.size, 0)
+    draw = ImageDraw.Draw(mask)
+    draw.rectangle([(x1, y1), (x2, y2)], fill=255)
+    # mask.save('mask.png')
+
+    # Blur image
+    blurred = new_image.filter(ImageFilter.GaussianBlur(15))
+
+    # add copyright
+    w, h = image2.size
+    x, y = int((image1_size[0]-w)/2), int((image1_size[1]-h)/2)
+    new_image.paste(image2,(x,y),image2)
+
+
+    # Paste blurred region and save result
+    new_image.paste(blurred, mask=mask)
     draw = ImageDraw.Draw(new_image)
     draw.rectangle(
-            (0, int(new_image.size[1]/2), new_image.size[0], new_image.size[1]), fill='black')
+        (0, int(new_image.size[1]/2), new_image.size[0], new_image.size[1]), fill='#101820FF')
     font = ImageFont.truetype("arial.ttf", 40)
-    draw.text((20, int(new_image.size[1]/2)+10), text1, fill=(209, 239, 8), font=font)
+    draw.text((20, int(new_image.size[1]/2)+10),
+              text1, fill="#FEE715FF", font=font)
     new_image.save(image , "webp")         # save new image
+    if(testMode):
+        print("logo added")
     return image
 
 
@@ -171,7 +203,7 @@ def getdata(url):
     # print("loop",title)
 
     title = title.split(" |")[0] +" "+year+" | Price, Photos, Mileage, Speed, Colors, etc"
-    descri = "Find NAME price, speed, mileage, images, specifications, news, videos, Colours and variants information at BikeSpeci. More Details.".replace("NAME",bike_name)
+    descri = "Find NAME price, speed, mileage, images, specifications, news, videos, Colours and variants information at TheBikeWiki. More Details.".replace("NAME",bike_name)
     #print(title+"\n"+tags+"\n"+descri)
 
     ind = str(table).index("Further")
@@ -214,8 +246,10 @@ def getdata(url):
     downloadedImg=[]
     try:
         for i in downloadImg(soup):
-            downloadedImg.append(addLogo(text1, "./LOGO.png", i))
-    except:
+            downloadedImg.append(addLogo(text1, "./thebikewiki.png", i))
+    except Exception as e:
+        if(testMode):
+            print(e)
         downloadedImg.append("./TheBikeWiki_thumbnail.png")
     # pimage = addLogo(text1, "./LOGO.png", downloadImg(soup))
     category=soup.find("h1").find("a").text
@@ -256,8 +290,9 @@ def getdata(url):
 # print(addLogo("./LOGO.png",downloadImg(soup)))
 if __name__=="__main__":
     url = "https://bikez.com/motorcycles/aeon_cobra_400_supermoto_2022.php"
-    # url = "https://bikez.com/motorcycles/ajs_125_eco_commuter_2010.php"
-    # reqs = requests.get(url)
-    # soup = BeautifulSoup(reqs.text, 'html.parser')
+    url = "https://bikez.com/motorcycles/ajs_125_eco_commuter_2010.php"
+    reqs = requests.get(url)
+    soup = BeautifulSoup(reqs.text, 'html.parser')
+    # addLogo("aeon cobra 400", "./thebikewiki.png", downloadImg(soup)[0])
     # print(downloadImg(soup))
     getdata(url)

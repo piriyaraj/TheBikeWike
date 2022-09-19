@@ -1,7 +1,11 @@
 from django.urls import path
-
+from django.contrib.sitemaps.views import sitemap
+from blog.sitemap import blogSitemap
 from .views import *
 
+sitemaps={
+    "blog":blogSitemap
+}
 urlpatterns = [
     path('', home, name='home'),
     path('blogs/', blogs, name='blogs'),
@@ -15,4 +19,5 @@ urlpatterns = [
     path('my_blogs/', my_blogs, name='my_blogs'),
     path('add_blog/', add_blog, name='add_blog'),
     path('update_blog/<str:slug>/', update_blog, name='update_blog'),
+    path("sitemap.xml",sitemap,{'sitemaps':sitemaps})
 ]

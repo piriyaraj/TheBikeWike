@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'user_profile',
     'notification',
     'ckeditor',
-    'Extract'
+    'Extract',
+    "django.contrib.sitemaps",
 ]
 
 MIDDLEWARE = [

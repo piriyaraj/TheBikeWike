@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 from django.utils.text import slugify
 
 from user_profile.models import User
@@ -58,7 +59,10 @@ class Blog(models.Model):
     created_date = models.DateTimeField(auto_now_add=True, editable=True)
     isupdated = models.IntegerField(choices=STATUS, default=0)
 
-
+    def get_absolute_url(self):
+        # return reverse("post/", args=[self.slug])
+        return f'/{self.slug}/'
+    
     def __str__(self) -> str:
         return self.title
 

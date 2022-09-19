@@ -2,13 +2,13 @@
 {% load static %}
 
 {% block title %}Find {{blog.title}} Price, Mileage, Images, Colours{% endblock title %}
-{% block description %}See more details & offers about {{blog.title}} discover the engine, body, physical specifications and reviews{% endblock description %}
+{% block description %}{{blog.title}} See more details & offers about {{blog.title}} discover the engine, body, physical specifications and reviews{% endblock description %}
 {% block canonical_url %}{{ request.path }}{% endblock %}
 {% block robottext %}index, follow{% endblock robottext %}
 {% block keywords %} {{blog.title}},{{blog.title}} Bike, bike, {{blog.title}} Price, {{blog.title}} Reviews, {{blog.title}} Images, {{blog.title}} Mileage, motorcycle, specifications, specs.   Rating.{% endblock keywords %}
 
 {% block ogimage %}{{blog.banner.url}}{% endblock ogimage %}
-{% block ogdescription %} See more details & offers about {{blog.title}} discover the engine, body, physical specifications and reviews{% endblock ogdescription %}
+{% block ogdescription %}{{blog.title}} See more details & offers about {{blog.title}} discover the engine, body, physical specifications and reviews{% endblock ogdescription %}
 {% block ogurl %}{{ request.path }}{% endblock ogurl%}
 
 {% block content %}

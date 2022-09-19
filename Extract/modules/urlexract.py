@@ -1,3 +1,4 @@
+import shutil
 from django.core.files.uploadedfile import UploadedFile
 from django.shortcuts import get_object_or_404
 from . import extracter, setmodels, urlexract
@@ -211,9 +212,12 @@ def updatePostUrl():
 
 
 def updateBikePost():  # update every post content , images and data table
+    try:
+        shutil.rmtree('./tempImg')
+    except:pass
     urlsObjs=Url.objects.filter(status=0)
     # print(len(urlsObjs))
-    for i in urlsObjs[:1]:
+    for i in urlsObjs:
         title, key, value, images, contant,category = extracter.getdata(i.link)
         print(category)
 
@@ -261,11 +265,11 @@ def updateBikePost():  # update every post content , images and data table
                 title.split(" |")[
                     0]+" its show front, back, side view and show bike specifications"
             newBikeImage.save()
-            # os.remove(i)
+            # os.remove(j)
         i.status=1
         i.postId = newBikePost
         i.save()
-        return "done"
+        
     return "Post extract successfully"
 
 #postlinks_n="https://bikez.com/year/2020-motorcycle-models.php"

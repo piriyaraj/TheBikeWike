@@ -28,7 +28,7 @@
                 {% endfor %}
               </div>
             </li>
-            {% if request.user.is_authenticated %}
+            {% comment %} {% if request.user.is_authenticated %}
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 {{request.user.username}}
@@ -51,7 +51,7 @@
             <li class="nav-item">
               <a class="nav-link" href="{% url 'login' %}">Login</a>
             </li>
-            {% endif %}
+            {% endif %} {% endcomment %}
           </ul>
           <form class="form-inline d-flex flex-nowrap my-2 ml-auto search-form" action="{% url 'search_blogs' %}" method="GET">
             <input class="form-control px-5" name="search" type="text" placeholder="Search blogs" required>
