@@ -1,4 +1,4 @@
-from asyncio.windows_events import NULL
+# from asyncio.windows_events import NULL
 from pyexpat import model
 from tkinter import CASCADE
 from xml.etree.ElementInclude import default_loader
@@ -15,12 +15,12 @@ STATUS = (
 class Model(models.Model):
     name=models.CharField(max_length=100)
     noOfPost=models.IntegerField(default=0)
-    modelLink=models.URLField(unique=True,default=NULL)
+    modelLink=models.URLField(unique=True,default=None)
     status = models.IntegerField(choices=STATUS, default=0)
 
 
 class Url(models.Model):
-    link=models.URLField(unique=True,default=NULL)
+    link=models.URLField(unique=True,default=None)
     status=models.IntegerField(choices=STATUS,default=0)
     modelId=models.ForeignKey(Model,on_delete=models.CASCADE)
     date=models.DateTimeField(auto_now_add=True)
