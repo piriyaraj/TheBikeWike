@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-0ebap7n0ozdz48o9)*i9v-i&ss@tvsetv4^(!wuoiton@aaux6
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['10.30.4.43',"127.0.0.1"]
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -85,7 +85,7 @@ WSGI_APPLICATION = 'blog_website.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': str(BASE_DIR.parent / 'db.sqlite3'),
+        'NAME': str(BASE_DIR.parent / 'theBikeWiki.sqlite3'),
     }
 }
 
